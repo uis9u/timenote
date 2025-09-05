@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import { IconEdit, IconTrash } from "@tabler/icons-react";
+
 // Define the structure of a single note
 interface Note {
   id: number;
@@ -122,6 +124,7 @@ const App: React.FC = () => {
     <div className="container mt-4 mb-4">
       <header className="text-center mb-4">
         <h1 className="display-4">TimeNote</h1>
+        <i className="bi bi-trophy-fill"></i>
         <p className="lead">timeline note app</p>
       </header>
 
@@ -170,7 +173,7 @@ const App: React.FC = () => {
                 </div>
                 <div className="col-sm-12 col-md-2 d-flex gap-2">
                   <button type="submit" className="btn btn-primary w-100">
-                    {editingNoteId !== null ? "更新" : "保存"}
+                    {editingNoteId !== null ? "update" : "save"}
                   </button>
                   {editingNoteId !== null && (
                     <button
@@ -178,7 +181,7 @@ const App: React.FC = () => {
                       className="btn btn-secondary w-100"
                       onClick={handleCancelEdit}
                     >
-                      キャンセル
+                      cancel
                     </button>
                   )}
                 </div>
@@ -215,7 +218,7 @@ const App: React.FC = () => {
                     className="btn btn-outline-primary btn-sm"
                     onClick={() => handleEdit(note)}
                   >
-                    編集
+                    <IconEdit />
                   </button>
                 </div>
                 <div className="my-1">
@@ -223,7 +226,7 @@ const App: React.FC = () => {
                     className="btn btn-outline-danger btn-sm"
                     onClick={() => handleDelete(note.id)}
                   >
-                    削除
+                    <IconTrash />
                   </button>
                 </div>
               </div>
