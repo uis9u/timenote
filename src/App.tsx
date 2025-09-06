@@ -125,7 +125,6 @@ const App: React.FC = () => {
       <header className="text-center mb-4">
         <h1 className="display-4">TimeNote</h1>
         <i className="bi bi-trophy-fill"></i>
-        <p className="lead">timeline note app</p>
       </header>
 
       <main>
@@ -231,11 +230,13 @@ const App: React.FC = () => {
                       {note.startTime} - {note.endTime}
                     </strong>
                     <span className="text-break me-3">
-                      {`${(
-                        (timeToMinutes(note.endTime) -
-                          timeToMinutes(note.startTime)) /
-                        60
-                      ).toFixed(2)}h`}
+                      {`${parseFloat(
+                        (
+                          (timeToMinutes(note.endTime) -
+                            timeToMinutes(note.startTime)) /
+                          60
+                        ).toFixed(2)
+                      )}h`}
                     </span>
                     <span>{note.text}</span>
                   </div>
@@ -268,7 +269,7 @@ const App: React.FC = () => {
       </main>
 
       <footer className="text-center mt-4 text-muted">
-        <p>&copy; {new Date().getFullYear()} TimeNote App</p>
+        <p>&copy; {new Date().getFullYear()} All rights reserved.</p>
       </footer>
     </div>
   );
