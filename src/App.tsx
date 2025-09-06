@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
-import { IconEdit, IconTrash } from "@tabler/icons-react";
+import { IconPencil, IconTrash } from "@tabler/icons-react";
 
-// Define the structure of a single note
 interface Note {
   id: number;
   startTime: string;
@@ -22,19 +21,14 @@ function minutesToTime(minutes: number) {
 }
 
 const App: React.FC = () => {
-  // State for the list of notes
   const [notes, setNotes] = useState<Note[]>([]);
-  // State for the form inputs
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [text, setText] = useState("");
-  // State to track the note being edited
   const [editingNoteId, setEditingNoteId] = useState<number | null>(null);
 
-  // Load notes from localStorage when the component mounts
   useEffect(() => {
     try {
-      // Using a new key to avoid conflicts with old data structure
       const savedNotes = localStorage.getItem("timenotes_v3");
       if (savedNotes) {
         setNotes(JSON.parse(savedNotes));
@@ -44,7 +38,6 @@ const App: React.FC = () => {
     }
   }, []);
 
-  // Save notes to localStorage whenever the notes state changes
   useEffect(() => {
     try {
       localStorage.setItem("timenotes_v3", JSON.stringify(notes));
@@ -53,20 +46,18 @@ const App: React.FC = () => {
     }
   }, [notes]);
 
-  // Handle form submission for both creating and updating notes
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!startTime || !endTime || !text.trim()) {
-      alert("開始時間、終了時間、内容のすべてを入力してください。");
+      alert("Please fill in all fields.");
       return;
     }
 
     if (startTime >= endTime) {
-      alert("終了時間は開始時間より後に設定してください。");
+      alert("Please set the end time later than the start time.");
       return;
     }
 
-    // If we are editing, update the existing note
     if (editingNoteId !== null) {
       setNotes((prevNotes) =>
         prevNotes
@@ -78,9 +69,8 @@ const App: React.FC = () => {
           .sort((a, b) => a.startTime.localeCompare(b.startTime))
       );
     } else {
-      // Otherwise, create a new note
       const newNote: Note = {
-        id: Date.now(), // Use timestamp for a unique ID
+        id: Date.now(),
         startTime,
         endTime,
         text,
@@ -92,14 +82,12 @@ const App: React.FC = () => {
       );
     }
 
-    // Reset form and editing state
     setStartTime("");
     setEndTime("");
     setText("");
     setEditingNoteId(null);
   };
 
-  // Handle starting the edit process
   const handleEdit = (note: Note) => {
     setEditingNoteId(note.id);
     setStartTime(note.startTime);
@@ -107,12 +95,10 @@ const App: React.FC = () => {
     setText(note.text);
   };
 
-  // Handle note deletion
   const handleDelete = (id: number) => {
     setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
   };
 
-  // Handle canceling an edit
   const handleCancelEdit = () => {
     setEditingNoteId(null);
     setStartTime("");
@@ -128,26 +114,30 @@ const App: React.FC = () => {
       </header>
 
       <main>
-        {/* Input Form */}
         <div className="card mb-4">
           <div className="card-body">
             <form onSubmit={handleSubmit}>
               <div className="row g-3 align-items-end">
                 <div className="col-sm-4 col-md-3">
                   <label htmlFor="start-time-input" className="form-label">
-                    start time
+                    0:00 ~
                   </label>
                   <input
                     id="start-time-input"
                     type="time"
                     className="form-control"
                     value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
+                    onChange={(e) => {
+                      setStartTime(e.target.value);
+                    }}
                   />
                 </div>
                 <div className="col-sm-4 col-md-3">
-                  <label htmlFor="end-time-input" className="form-label">
-                    end time
+                  <label
+                    htmlFor="end-time-input"
+                    className="text-right form-label"
+                  >
+                    ~ 23:59
                   </label>
                   <input
                     id="end-time-input"
@@ -159,7 +149,7 @@ const App: React.FC = () => {
                 </div>
                 <div className="col-sm-12 col-md-4">
                   <label htmlFor="text-input" className="form-label">
-                    What to do
+                    activity
                   </label>
                   <input
                     id="text-input"
@@ -167,7 +157,7 @@ const App: React.FC = () => {
                     className="form-control"
                     value={text}
                     onChange={(e) => setText(e.target.value)}
-                    placeholder="meeting..."
+                    placeholder="coding"
                   />
                 </div>
                 <div className="col-sm-12 col-md-2 d-flex gap-2">
@@ -189,7 +179,6 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        {/* Notes List */}
         {notes.length > 0 ? (
           <div className="mb-2 d-flex justify-content-between align-items-center">
             <h2 className="h5">Your Activities</h2>
@@ -245,7 +234,7 @@ const App: React.FC = () => {
                       className="btn btn-outline-primary btn-sm"
                       onClick={() => handleEdit(note)}
                     >
-                      <IconEdit />
+                      <IconPencil />
                     </button>
                   </div>
                   <div className="my-1">
