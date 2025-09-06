@@ -189,22 +189,25 @@ const App: React.FC = () => {
                 className="btn btn-outline-primary btn-sm"
                 onClick={() => {
                   if (window.confirm("Download as .txt file")) {
-                    notes.forEach((note) => {
-                      const a = document.createElement("a");
-                      a.href = `data:text/plain;charset=utf-8,${encodeURIComponent(
-                        `${note.startTime} - ${note.endTime} ${parseFloat(
-                          (
-                            (timeToMinutes(note.endTime) -
-                              timeToMinutes(note.startTime)) /
-                            60
-                          ).toFixed(2)
-                        )}h ${note.text}`
-                      )}`;
-                      a.download = `${new Date()
-                        .toISOString()
-                        .slice(0, 10)}.txt`;
-                      a.click();
-                    });
+                    const exportContents = notes
+                      .map(
+                        (v) =>
+                          `${v.startTime} - ${v.endTime} ${v.text} ${parseFloat(
+                            (
+                              (timeToMinutes(v.endTime) -
+                                timeToMinutes(v.startTime)) /
+                              60
+                            ).toFixed(2)
+                          )}h`
+                      )
+                      .join("\n");
+
+                    const a = document.createElement("a");
+                    a.href = `data:text/plain;charset=utf-8,${encodeURIComponent(
+                      exportContents
+                    )}`;
+                    a.download = `${new Date().toISOString().slice(0, 10)}.txt`;
+                    a.click();
                   }
                 }}
                 disabled={notes.length === 0}
