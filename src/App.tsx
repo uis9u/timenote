@@ -191,46 +191,73 @@ const App: React.FC = () => {
         </div>
 
         {/* Notes List */}
+        {notes.length > 0 ? (
+          <div className="mb-2 d-flex justify-content-between align-items-center">
+            <h2 className="h5">Your Activities</h2>
+
+            <div className="d-flex align-items-center gap-2">
+              <span className="badge bg-secondary">{notes.length}</span>
+              <button
+                className="btn btn-outline-danger btn-sm"
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      "Are you sure you want to delete all notes? This action cannot be undone."
+                    )
+                  ) {
+                    setNotes([]);
+                  }
+                }}
+                disabled={notes.length === 0}
+              >
+                Delete All
+              </button>
+            </div>
+          </div>
+        ) : null}
+
         <div className="list-group">
           {notes.length > 0 ? (
-            notes.map((note) => (
-              <div
-                key={note.id}
-                className={`list-group-item d-flex gap-2 justify-content-between align-items-center flex-wrap ${
-                  editingNoteId === note.id ? "list-group-item-info" : ""
-                }`}
-              >
-                <div className="me-auto my-1">
-                  <strong className="font-monospace me-3">
-                    {note.startTime} - {note.endTime}
-                  </strong>
-                  <span className="text-break me-3">
-                    {`${
-                      (timeToMinutes(note.endTime) -
-                        timeToMinutes(note.startTime)) /
-                      60
-                    }h`}
-                  </span>
-                  <span>{note.text}</span>
+            notes.map((note) => {
+              return (
+                <div
+                  key={note.id}
+                  className={`list-group-item d-flex gap-2 justify-content-between align-items-center flex-wrap ${
+                    editingNoteId === note.id ? "list-group-item-info" : ""
+                  }`}
+                >
+                  <div className="me-auto my-1">
+                    <strong className="font-monospace me-3">
+                      {note.startTime} - {note.endTime}
+                    </strong>
+                    <span className="text-break me-3">
+                      {`${(
+                        (timeToMinutes(note.endTime) -
+                          timeToMinutes(note.startTime)) /
+                        60
+                      ).toFixed(2)}h`}
+                    </span>
+                    <span>{note.text}</span>
+                  </div>
+                  <div className="my-1">
+                    <button
+                      className="btn btn-outline-primary btn-sm"
+                      onClick={() => handleEdit(note)}
+                    >
+                      <IconEdit />
+                    </button>
+                  </div>
+                  <div className="my-1">
+                    <button
+                      className="btn btn-outline-danger btn-sm"
+                      onClick={() => handleDelete(note.id)}
+                    >
+                      <IconTrash />
+                    </button>
+                  </div>
                 </div>
-                <div className="my-1">
-                  <button
-                    className="btn btn-outline-primary btn-sm"
-                    onClick={() => handleEdit(note)}
-                  >
-                    <IconEdit />
-                  </button>
-                </div>
-                <div className="my-1">
-                  <button
-                    className="btn btn-outline-danger btn-sm"
-                    onClick={() => handleDelete(note.id)}
-                  >
-                    <IconTrash />
-                  </button>
-                </div>
-              </div>
-            ))
+              );
+            })
           ) : (
             <div className="text-center text-muted p-4">
               <p>You don't have any recorded activities yet.</p>
