@@ -186,6 +186,32 @@ const App: React.FC = () => {
             <div className="d-flex align-items-center gap-2">
               <span className="badge bg-secondary">{notes.length}</span>
               <button
+                className="btn btn-outline-primary btn-sm"
+                onClick={() => {
+                  if (window.confirm("Download as .txt file")) {
+                    notes.forEach((note) => {
+                      const a = document.createElement("a");
+                      a.href = `data:text/plain;charset=utf-8,${encodeURIComponent(
+                        `${note.startTime} - ${note.endTime} ${parseFloat(
+                          (
+                            (timeToMinutes(note.endTime) -
+                              timeToMinutes(note.startTime)) /
+                            60
+                          ).toFixed(2)
+                        )}h ${note.text}`
+                      )}`;
+                      a.download = `${new Date()
+                        .toISOString()
+                        .slice(0, 10)}.txt`;
+                      a.click();
+                    });
+                  }
+                }}
+                disabled={notes.length === 0}
+              >
+                Export
+              </button>
+              <button
                 className="btn btn-outline-danger btn-sm"
                 onClick={() => {
                   if (
