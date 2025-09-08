@@ -120,7 +120,7 @@ const App: React.FC = () => {
               <div className="row g-3 align-items-end">
                 <div className="col-sm-4 col-md-3">
                   <label htmlFor="start-time-input" className="form-label">
-                    0:00 ~
+                    start
                   </label>
                   <input
                     id="start-time-input"
@@ -137,7 +137,7 @@ const App: React.FC = () => {
                     htmlFor="end-time-input"
                     className="text-right form-label"
                   >
-                    ~ 23:59
+                    end
                   </label>
                   <input
                     id="end-time-input"
@@ -192,7 +192,7 @@ const App: React.FC = () => {
                     const exportContents = notes
                       .map(
                         (v) =>
-                          `${v.startTime} - ${v.endTime} ${v.text} ${parseFloat(
+                          `${v.text} ${parseFloat(
                             (
                               (timeToMinutes(v.endTime) -
                                 timeToMinutes(v.startTime)) /
